@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متوسطة عمرو بن العاص بالهفوف - نظام النقاط والتحفيز</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="logo.png" alt="شعار المدرسة" class="school-logo">
+                <h1>متوسطة عمرو بن العاص بالهفوف</h1>
+                <p>نظام النقاط والتحفيز</p>
+            </div>
+            <div class="login-options">
+                <button class="login-option" onclick="showStudentAccess()">
+                    <i class="fas fa-user-graduate"></i>
+                    <h3>دخول الطلاب</h3>
+                    <p>إضافة المشاركات والأنشطة</p>
+                </button>
+                <button class="login-option" onclick="showAdminLogin()">
+                    <i class="fas fa-user-shield"></i>
+                    <h3>دخول الإدارة</h3>
+                    <p>إدارة النظام والموافقات</p>
+                </button>
+            </div>
+            
+            <!-- Designer Credit -->
+            <div class="login-footer">
+                <p>مصمم اللوحة التفاعلية الأستاذ فاضل المبارك</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>دخول الإدارة</h3>
+                <span class="close" onclick="closeModal('admin-login-modal')">&times;</span>
+            </div>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="admin-password" required placeholder="أدخل كلمة المرور">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">دخول</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('admin-login-modal')">إلغاء</button>
+                </div>
+            </form>
+            <div class="password-hint">
+                <small>كلمة المرور الافتراضية: admin123</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="main-header" style="display: none;">
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="شعار المدرسة" class="header-logo">
+                <h1>متوسطة عمرو بن العاص</h1>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-section="dashboard" data-admin="true">
+                    <i class="fas fa-chart-line"></i>
+                    لوحة التحكم
+                </button>
+                <button class="nav-btn" data-section="students" data-admin="true">
+                    <i class="fas fa-user-graduate"></i>
+                    إدارة الطلاب
+                </button>
+                <button class="nav-btn" data-section="teachers" data-admin="true">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    إدارة المعلمين
+                </button>
+                <button class="nav-btn" data-section="classes" data-admin="true">
+                    <i class="fas fa-school"></i>
+                    إدارة الفصول
+                </button>
+                <button class="nav-btn" data-section="activities">
+                    <i class="fas fa-tasks"></i>
+                    المشاركات
+                </button>
+                <button class="nav-btn" data-section="rankings">
+                    <i class="fas fa-trophy"></i>
+                    الترتيب
+                </button>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    خروج
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-line"></i>
+                    لوحة التحكم الرئيسية
+                </h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-students">0</h3>
+                            <p>إجمالي الطلاب</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-teachers">0</h3>
+                            <p>إجمالي المعلمين</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-activities">0</h3>
+                            <p>إجمالي المشاركات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-points">0</h3>
+                            <p>إجمالي النقاط</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>أفضل 5 طلاب</h3>
+                        <div id="top-students" class="top-list"></div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>أفضل 5 معلمين</h3>
+                        <div id="top-teachers" class="top-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="students" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-user-graduate"></i>
+                    إدارة الطلاب
+                </h2>
+                
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddStudentModal()">
+                        <i class="fas fa-plus"></i>
+                        إضافة طالب جديد
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الصف</th>
+                                <th>النقاط</th>
+                                <th>المشاركات</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Teachers Section -->
+            <section id="teachers" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    إدارة المعلمين
+                </h2>
+                
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddTeacherModal()">
+                        <i class="fas fa-plus"></i>
+                        إضافة معلم جديد
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>التخصص</th>
+                                <th>الصف المسؤول عنه</th>
+                                <th>النقاط</th>
+                                <th>المشاركات</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachers-table">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Classes Section -->
+            <section id="classes" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-school"></i>
+                    إدارة الفصول
+                </h2>
+                
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddClassModal()">
+                        <i class="fas fa-plus"></i>
+                        إضافة فصل جديد
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>اسم الفصل</th>
+                                <th>عدد الطلاب</th>
+                                <th>الوصف</th>
+                                <th>إجمالي النقاط</th>
+                                <th>إجمالي المشاركات</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="classes-table">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Activities Section -->
+            <section id="activities" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-tasks"></i>
+                    إدارة المشاركات
+                </h2>
+                
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="showAddActivityModal()">
+                        <i class="fas fa-plus"></i>
+                        إضافة مشاركة جديدة
+                    </button>
+                </div>
+                
+                <div class="filters">
+                    <select id="activity-filter-type">
+                        <option value="">جميع أنواع المشاركات</option>
+                        <option value="مشروع">مشروع</option>
+                        <option value="مبادرة">مبادرة</option>
+                        <option value="درس تطبيقي">درس تطبيقي</option>
+                        <option value="موهبة">موهبة/إبداع</option>
+                        <option value="ورشة عمل">ورشة عمل</option>
+                        <option value="دورة تدريبية">دورة تدريبية</option>
+                    </select>
+                    
+                    <select id="activity-filter-status">
+                        <option value="">جميع الحالات</option>
+                        <option value="pending">في انتظار الموافقة</option>
+                        <option value="approved">معتمد</option>
+                        <option value="rejected">مرفوض</option>
+                    </select>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>العنو��ن</th>
+                                <th>النوع</th>
+                                <th>المشارك</th>
+                                <th>النقاط</th>
+                                <th>التاريخ</th>
+                                <th>الحالة</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activities-table">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Rankings Section -->
+            <section id="rankings" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i>
+                    ترتيب النقاط
+                </h2>
+                
+                <div class="ranking-tabs">
+                    <button class="tab-btn active" data-tab="students-ranking">ترتيب الطلاب</button>
+                    <button class="tab-btn" data-tab="teachers-ranking">ترتيب المعلمين</button>
+                    <button class="tab-btn" data-tab="classes-ranking">ترتيب الفصول</button>
+                </div>
+                
+                <div id="students-ranking" class="ranking-content active">
+                    <div class="ranking-list" id="students-ranking-list"></div>
+                </div>
+                
+                <div id="teachers-ranking" class="ranking-content">
+                    <div class="ranking-list" id="teachers-ranking-list"></div>
+                </div>
+                
+                <div id="classes-ranking" class="ranking-content">
+                    <div class="ranking-list" id="classes-ranking-list"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>مصمم اللوحة التفاعلية الأستاذ فاضل المبارك</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- Add Student Modal -->
+    <div id="add-student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة طالب جديد</h3>
+                <span class="close" onclick="closeModal('add-student-modal')">&times;</span>
+            </div>
+            <form id="add-student-form">
+                <div class="form-group">
+                    <label>اسم الطالب</label>
+                    <input type="text" id="student-name" required>
+                </div>
+                <div class="form-group">
+                    <label>الصف الدراسي</label>
+                    <select id="student-grade" required>
+                        <option value="">اختر الصف</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">إضافة الطالب</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-student-modal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Teacher Modal -->
+    <div id="add-teacher-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة معلم جديد</h3>
+                <span class="close" onclick="closeModal('add-teacher-modal')">&times;</span>
+            </div>
+            <form id="add-teacher-form">
+                <div class="form-group">
+                    <label>اسم المعلم</label>
+                    <input type="text" id="teacher-name" required>
+                </div>
+                <div class="form-group">
+                    <label>التخصص</label>
+                    <input type="text" id="teacher-subject" required>
+                </div>
+                <div class="form-group">
+                    <label>الصف المسؤول عنه</label>
+                    <select id="teacher-grade" required>
+                        <option value="">اختر الصف</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">إضافة المعلم</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-teacher-modal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Class Modal -->
+    <div id="add-class-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة فصل جديد</h3>
+                <span class="close" onclick="closeModal('add-class-modal')">&times;</span>
+            </div>
+            <form id="add-class-form">
+                <div class="form-group">
+                    <label>اسم الفصل</label>
+                    <input type="text" id="class-name" required placeholder="مثال: الصف الأول أ">
+                </div>
+                <div class="form-group">
+                    <label>وصف الفصل (اختياري)</label>
+                    <textarea id="class-description" rows="2" placeholder="وصف مختصر عن الفصل"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">إضافة الفصل</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-class-modal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Activity Modal -->
+    <div id="add-activity-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة مشاركة جديدة</h3>
+                <span class="close" onclick="closeModal('add-activity-modal')">&times;</span>
+            </div>
+            <form id="add-activity-form">
+                <div class="form-group">
+                    <label>عنوان المشاركة</label>
+                    <input type="text" id="activity-title" required>
+                </div>
+                <div class="form-group">
+                    <label>نوع المشاركة</label>
+                    <select id="activity-type" required>
+                        <option value="">اختر نوع المشاركة</option>
+                        <option value="مشروع" data-points="5">مشروع (5 نقاط)</option>
+                        <option value="مبادرة" data-points="3">مبادرة (3 نقاط)</option>
+                        <option value="درس تطبيقي" data-points="4">درس تطبيقي (4 نقاط)</option>
+                        <option value="موهبة" data-points="4">موهبة/إبداع (4 نقاط)</option>
+                        <option value="ورشة عمل" data-points="3">ورشة عمل (3 نقاط)</option>
+                        <option value="دورة تدريبية" data-points="4">دورة تدريبية (4 نقاط)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>نوع المشارك</label>
+                    <select id="participant-type" required>
+                        <option value="">اختر نوع المشارك</option>
+                        <option value="student">طالب</option>
+                        <option value="teacher">معلم</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المشارك</label>
+                    <select id="participant-id" required>
+                        <option value="">اختر المشارك</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>وصف المشاركة</label>
+                    <textarea id="activity-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>النقاط المحتسبة</label>
+                    <input type="number" id="activity-points" readonly>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">إضافة المشاركة</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-activity-modal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
